@@ -5,17 +5,6 @@ const createRoom = (capacity: number) => {
   const _capacity = capacity;
   const _currentZombies: any[] = [];
 
-  function isFull() {
-    
-    if (_capacity === 0) {
-      return true;
-    }
-    if(_capacity <= _currentZombies.length) {
-      return true;
-    }
-    return false;
-  }
-
   function addZombie(zombie: string) {
     if (_capacity === 0) {
       console.log("Can't add zombies to rooms with 0 capacity")
@@ -33,7 +22,7 @@ const createRoom = (capacity: number) => {
   return {
     _capacity: _capacity,
     _currentZombies: _currentZombies,
-    isFull: isFull,
+    isFull: () => _capacity === _currentZombies.length,
     addZombie: addZombie,
   };
 };

@@ -11,12 +11,9 @@ const createRoom = (capacity: number) => {
       return;
     }
     if(_capacity === _currentZombies.length) {
-      _currentZombies.splice(0, 1, zombie);
-      return;
+      _currentZombies.shift();
     }
-    else {
       _currentZombies.push(zombie);
-    }
   }
 
   return {
@@ -79,6 +76,7 @@ test("third zombie consumes first zombie when added to a two-roomer", () => {
   room.addZombie("bosse");
   room.addZombie("berta");
   room.addZombie("bosserta");
+  console.log(room._currentZombies)
   ok(room._currentZombies.includes("berta")
   && room._currentZombies.includes("bosserta")
   && !room._currentZombies.includes("bosse"))

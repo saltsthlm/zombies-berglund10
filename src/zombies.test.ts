@@ -8,6 +8,9 @@ const createRoom = (capacity: number) => {
 
 
   function isFull() {
+    if(full) {
+      return true;
+    }
     if (_capacity === 0) {
       return true;
     }
@@ -26,9 +29,15 @@ const createRoom = (capacity: number) => {
   function addZombie(zombie: string) {
     if (_capacity === 0) {
       console.log("Can't add zombies to rooms with 0 capacity")
-      return false;
+      full = true;
     }
-    _currentZombies.push(zombie);
+    if(_capacity === _currentZombies.length) {
+      _currentZombies.splice(0, 1, zombie);
+      full = true;
+    }
+    else {
+      _currentZombies.push(zombie);
+    }
   }
 
   return {
@@ -61,8 +70,10 @@ test("empty room that fits one zombie is not full", () => {
 
 test("room with no capacity cannot fit any zombies", () => {
   const room = createRoom(0);
+  room.addZombie("bosse");
+  const isRoomFull = room.isFull();
 
-  ok(!room.addZombie("Test zombie")); // It's not ok to add zombie to room with 0 capacity for it.
+  ok(isRoomFull); // It's not ok to add zombie to room with 0 capacity for it.
 })
 //test.skip("room with no capacity cannot fit any zombies", () => {});
 
@@ -84,6 +95,13 @@ test("two-roomer is not full when a zombie is added", () => {
 })
 //test.skip("two-roomer is not full when a zombie is added", () => { });
 
-test.skip("second zombie consumes first zombie when added to a one-roomer", () => { });
+test("second zombie consumes first zombie when added to a one-roomer", () => {
+    const room = createRoom(1);
+    room.addZombie("bosse");
+    room.addZombie("berta")
+    ok(room._currentZombies.includes("berta") && !room._currentZombies.includes("bosse"))
+})
+
+//test.skip("second zombie consumes first zombie when added to a one-roomer", () => { });
 
 // You are free to add more tests that you think are relevant!

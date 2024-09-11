@@ -104,4 +104,15 @@ test("second zombie consumes first zombie when added to a one-roomer", () => {
 
 //test.skip("second zombie consumes first zombie when added to a one-roomer", () => { });
 
+test("third zombie consumes first zombie when added to a two-roomer", () => {
+  const room = createRoom(2);
+  room.addZombie("bosse");
+  room.addZombie("berta");
+  room.addZombie("bosserta");
+  ok(room._currentZombies.includes("berta")
+  && room._currentZombies.includes("bosserta")
+  && !room._currentZombies.includes("bosse"))
+})
+
+
 // You are free to add more tests that you think are relevant!

@@ -4,13 +4,9 @@ import { test } from "node:test";
 const createRoom = (capacity: number) => {
   const _capacity = capacity;
   const _currentZombies: any[] = [];
-  let full = false;
-
 
   function isFull() {
-    if(full) {
-      return true;
-    }
+    
     if (_capacity === 0) {
       return true;
     }
@@ -19,21 +15,15 @@ const createRoom = (capacity: number) => {
     }
     return false;
   }
-  function isEmpty() {
-    if (_capacity > 0 && !full) {
-      return true;
-    }
-    return false;
-  }
 
   function addZombie(zombie: string) {
     if (_capacity === 0) {
       console.log("Can't add zombies to rooms with 0 capacity")
-      full = true;
+      return;
     }
     if(_capacity === _currentZombies.length) {
       _currentZombies.splice(0, 1, zombie);
-      full = true;
+      return;
     }
     else {
       _currentZombies.push(zombie);
@@ -42,10 +32,9 @@ const createRoom = (capacity: number) => {
 
   return {
     _capacity: _capacity,
+    _currentZombies: _currentZombies,
     isFull: isFull,
-    isEmpty: isEmpty,
     addZombie: addZombie,
-    _currentZombies: _currentZombies
   };
 };
 
@@ -61,9 +50,8 @@ test("empty room that fits one zombie is not full", () => {
   const room = createRoom(1);
 
   const isRoomFull = room.isFull();
-  const isRoomEmpty = room.isEmpty();
 
-  ok(isRoomEmpty && !isRoomFull);
+  ok(!isRoomFull);
 })
 
 test("room with no capacity cannot fit any zombies", () => {

@@ -68,7 +68,7 @@ test("second zombie consumes first zombie when added to a one-roomer", () => {
     const room = createRoom(1);
     room.addZombie("bosse");
     room.addZombie("berta")
-    ok(room._currentZombies.includes("berta") && !room._currentZombies.includes("bosse"))
+    deepEqual(room._currentZombies, ["berta"]);
 })
 
 test("third zombie consumes first zombie when added to a two-roomer", () => {
@@ -76,7 +76,7 @@ test("third zombie consumes first zombie when added to a two-roomer", () => {
   room.addZombie("bosse");
   room.addZombie("berta");
   room.addZombie("bosserta");
-  deepEqual(room._currentZombies, ["berta", "bosse"])
+  deepEqual(room._currentZombies, ["berta", "bosserta"])
 })
 
 

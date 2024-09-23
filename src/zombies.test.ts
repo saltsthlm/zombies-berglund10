@@ -76,7 +76,6 @@ test("third zombie consumes first zombie when added to a two-roomer", () => {
   room.addZombie("bosse");
   room.addZombie("berta");
   room.addZombie("bosserta");
-  console.log(room._currentZombies)
   deepEqual(room._currentZombies, ["berta", "bosse"])
 })
 

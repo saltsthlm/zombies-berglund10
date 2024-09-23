@@ -1,11 +1,26 @@
-import { ok } from "node:assert/strict";
+import { deepEqual, ok } from "node:assert/strict";
 import { test } from "node:test";
 
 const createRoom = (capacity: number) => {
   const _capacity = capacity;
+  const _currentZombies: any[] = [];
+
+  function addZombie(zombie: string) {
+    if (_capacity === 0) {
+      console.log("Can't add zombies to rooms with 0 capacity")
+      return;
+    }
+    if(_capacity === _currentZombies.length) {
+      _currentZombies.shift();
+    }
+      _currentZombies.push(zombie);
+  }
 
   return {
-    isFull: () => true,
+    _capacity: _capacity,
+    _currentZombies: _currentZombies,
+    isFull: () => _capacity === _currentZombies.length,
+    addZombie: addZombie,
   };
 };
 
@@ -17,14 +32,52 @@ test("room is full", () => {
   ok(isRoomFull);
 });
 
-test.skip("empty room that fits one zombie is not full", () => {});
+test("empty room that fits one zombie is not full", () => {
+  const room = createRoom(1);
 
-test.skip("room with no capacity cannot fit any zombies", () => {});
+  const isRoomFull = room.isFull();
 
-test.skip("one-roomer becomes full when a zombie is added", () => {});
+  ok(!isRoomFull);
+})
 
-test.skip("two-roomer is not full when a zombie is added", () => {});
+test("room with no capacity cannot fit any zombies", () => {
+  const room = createRoom(0);
+  room.addZombie("bosse");
+  const isRoomFull = room.isFull();
 
-test.skip("second zombie consumes first zombie when added to a one-roomer", () => {});
+  ok(isRoomFull);
+})
+
+test("one-roomer becomes full when a zombie is added", () => {
+  const room = createRoom(1);
+  room.addZombie("bosse");
+  const isRoomFull = room.isFull();
+
+  ok(isRoomFull)
+
+})
+
+test("two-roomer is not full when a zombie is added", () => {
+    const room = createRoom(2);
+    room.addZombie("bosse");
+    const isRoomFull = room.isFull();
+    ok(!isRoomFull);
+})
+
+test("second zombie consumes first zombie when added to a one-roomer", () => {
+    const room = createRoom(1);
+    room.addZombie("bosse");
+    room.addZombie("berta")
+    deepEqual(room._currentZombies, ["berta"]);
+})
+
+test("third zombie consumes first zombie when added to a two-roomer", () => {
+  const room = createRoom(2);
+  room.addZombie("bosse");
+  room.addZombie("berta");
+  room.addZombie("bosserta");
+  deepEqual(room._currentZombies, ["berta", "bosserta"])
+})
+
 
 // You are free to add more tests that you think are relevant!

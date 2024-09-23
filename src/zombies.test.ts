@@ -1,4 +1,4 @@
-import { ok } from "node:assert/strict";
+import { deepEqual, ok } from "node:assert/strict";
 import { test } from "node:test";
 
 const createRoom = (capacity: number) => {
@@ -77,9 +77,7 @@ test("third zombie consumes first zombie when added to a two-roomer", () => {
   room.addZombie("berta");
   room.addZombie("bosserta");
   console.log(room._currentZombies)
-  ok(room._currentZombies.includes("berta")
-  && room._currentZombies.includes("bosserta")
-  && !room._currentZombies.includes("bosse"))
+  deepEqual(room._currentZombies, ["berta", "bosse"])
 })
 
 
